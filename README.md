@@ -5,7 +5,7 @@
 ### Monitor de Créditos e Limites de Ferramentas de IA para macOS
 
 [![macOS](https://img.shields.io/badge/macOS-Sonoma%2014%2B%20%7C%20Sequoia-black?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/pablomichelin/CreditWatch/releases/latest)
-[![Release](https://img.shields.io/badge/Versão-v0.12.0-2ea44f?style=for-the-badge&logo=github)](https://github.com/pablomichelin/CreditWatch/releases/latest)
+[![Release](https://img.shields.io/badge/Versão-v0.13.0-2ea44f?style=for-the-badge&logo=github)](https://github.com/pablomichelin/CreditWatch/releases/latest)
 [![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-Apoiar-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/pablomichelin)
 [![Privacidade](https://img.shields.io/badge/Privacidade-100%25%20Local-blue?style=for-the-badge&logo=lock)](https://github.com/pablomichelin/CreditWatch)
 
@@ -51,12 +51,17 @@
 | **Google AI Studio** | Medidores de requisições por minuto (RPM), tokens por minuto (TPM) e requisições por dia (RPD) |
 | **Antigravity** | Limites semanais e de 5 horas do Gemini e Claude/GPT |
 | **Grok** | Limites semanais compartilhados dos planos SuperGrok |
+| **Perplexity Pro** | Consultas diárias Pro restantes e identificação de plano |
+| **DeepSeek** | Saldo de créditos e consumo de recarga em USD da API |
+| **OpenRouter** | Saldo pré-pago de tokens em USD e créditos de API |
+| **v0.dev** | Saldo de créditos de geração de UI e prototipagem frontend |
+| **Midjourney** | Horas rápidas (Fast Hours) restantes e saldo de conta |
 
 ---
 
 ## 🚀 Como Instalar e Usar
 
-1. Baixe o instalador oficial em [**Releases Oficiais**](https://github.com/pablomichelin/CreditWatch/releases/latest) (`CreditWatch-v0.12.0.dmg`);
+1. Baixe o instalador oficial em [**Releases Oficiais**](https://github.com/pablomichelin/CreditWatch/releases/latest) (`CreditWatch-v0.13.0.dmg`);
 2. Abra o arquivo `.dmg` com dois cliques;
 3. Arraste o ícone do **CreditWatch** para a sua pasta **Aplicativos**;
 4. Abra o aplicativo na barra de menus, clique em **Configurar** e conecte as IAs que você utiliza.

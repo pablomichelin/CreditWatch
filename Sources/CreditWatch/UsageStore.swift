@@ -10,6 +10,11 @@ enum ProviderKind: String, CaseIterable, Codable, Identifiable {
     case gemini = "Gemini"
     case antigravity = "Antigravity"
     case grok = "Grok"
+    case perplexity = "Perplexity"
+    case deepseek = "DeepSeek"
+    case openrouter = "OpenRouter"
+    case v0 = "v0"
+    case midjourney = "Midjourney"
     case custom = "Outro"
 
     var id: String { rawValue }
@@ -24,6 +29,11 @@ enum ProviderKind: String, CaseIterable, Codable, Identifiable {
         case .gemini: .red
         case .antigravity: .purple
         case .grok: .indigo
+        case .perplexity: .cyan
+        case .deepseek: .blue
+        case .openrouter: .purple
+        case .v0: .pink
+        case .midjourney: .mint
         case .custom: .gray
         }
     }
@@ -37,6 +47,11 @@ enum ProviderKind: String, CaseIterable, Codable, Identifiable {
         case .gemini: URL(string: "https://aistudio.google.com/rate-limit?timeRange=last-28-days")
         case .antigravity: nil
         case .grok: URL(string: "https://grok.com/?_s=usage")
+        case .perplexity: URL(string: "https://www.perplexity.ai/settings/account")
+        case .deepseek: URL(string: "https://platform.deepseek.com/usage")
+        case .openrouter: URL(string: "https://openrouter.ai/credits")
+        case .v0: URL(string: "https://v0.dev/chat/settings/billing")
+        case .midjourney: URL(string: "https://www.midjourney.com/account")
         case .custom: nil
         }
     }
@@ -70,7 +85,12 @@ struct ProviderUsage: Identifiable, Codable, Equatable {
         .init(name: "Antigravity · Gemini 5h", kind: .antigravity, remaining: -1, unit: "% restante", resetsAt: nil),
         .init(name: "Antigravity · Claude/GPT semanal", kind: .antigravity, remaining: -1, unit: "% restante", resetsAt: nil),
         .init(name: "Antigravity · Claude/GPT 5h", kind: .antigravity, remaining: -1, unit: "% restante", resetsAt: nil),
-        .init(name: "Grok · limite semanal", kind: .grok, remaining: -1, unit: "% restante", resetsAt: nil)
+        .init(name: "Grok · limite semanal", kind: .grok, remaining: -1, unit: "% restante", resetsAt: nil),
+        .init(name: "Perplexity · Pro queries", kind: .perplexity, remaining: -1, unit: "consultas", resetsAt: nil),
+        .init(name: "DeepSeek · saldo", kind: .deepseek, remaining: -1, unit: "créditos", resetsAt: nil),
+        .init(name: "OpenRouter · saldo", kind: .openrouter, remaining: -1, unit: "créditos", resetsAt: nil),
+        .init(name: "v0 · créditos", kind: .v0, remaining: -1, unit: "créditos", resetsAt: nil),
+        .init(name: "Midjourney · Fast Hours", kind: .midjourney, remaining: -1, unit: "horas", resetsAt: nil)
     ]
 }
 
@@ -278,6 +298,48 @@ final class UsageStore: ObservableObject {
                        ? "O plano Free usa limites separados"
                        : "Abra Settings → Usage para atualizar")
             return "Grok conectado; abra Usage para ler o limite."
+        case .perplexity:
+            if let balance = creditBalance(in: text) {
+                update(name: "Perplexity · Pro queries", remaining: -1, unit: "consultas",
+                       detail: balance, resetLabel: "consultas Pro diárias")
+                return "Perplexity atualizado."
+            }
+            if text.range(of: "Pro", options: .caseInsensitive) != nil {
+                update(name: "Perplexity · Pro queries", remaining: -1, unit: "consultas",
+                       detail: "Plano Pro ativo", resetLabel: "consultas Pro renovam a cada 24h")
+                return "Perplexity Pro conectado."
+            }
+            update(name: "Perplexity · Pro queries", remaining: -1, unit: "consultas",
+                   detail: "Plano Free", resetLabel: "limite padrão gratuito")
+            return "Perplexity conectado."
+        case .deepseek:
+            if let balance = creditBalance(in: text) {
+                update(name: "DeepSeek · saldo", remaining: -1, unit: "créditos",
+                       detail: balance, resetLabel: "saldo disponível")
+                return "DeepSeek atualizado."
+            }
+            return "Abra Usage na DeepSeek para atualizar."
+        case .openrouter:
+            if let balance = creditBalance(in: text) {
+                update(name: "OpenRouter · saldo", remaining: -1, unit: "créditos",
+                       detail: balance, resetLabel: "saldo disponível")
+                return "OpenRouter atualizado."
+            }
+            return "Abra Credits no OpenRouter para atualizar."
+        case .v0:
+            if let balance = creditBalance(in: text) {
+                update(name: "v0 · créditos", remaining: -1, unit: "créditos",
+                       detail: balance, resetLabel: "créditos disponíveis")
+                return "v0 atualizado."
+            }
+            return "Abra Billing no v0 para atualizar."
+        case .midjourney:
+            if let balance = creditBalance(in: text) {
+                update(name: "Midjourney · Fast Hours", remaining: -1, unit: "horas",
+                       detail: balance, resetLabel: "horas rápidas restantes")
+                return "Midjourney atualizado."
+            }
+            return "Abra Account no Midjourney para atualizar."
         case .custom:
             return "Este provedor ainda não possui leitura automática."
         }

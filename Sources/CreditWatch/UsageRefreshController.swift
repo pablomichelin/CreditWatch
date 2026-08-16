@@ -7,7 +7,7 @@ enum VisiblePageSnapshot {
     JSON.stringify({
       lines: (document.body ? document.body.innerText.split('\n') : [])
         .map(x => x.trim())
-        .filter(x => /usage|uso|billing|cobrança|plan|free|gratuito|limit|weekly|semanal|rate|reset|remaining|restante|redefini|renova|auto renew|included usage|extra usage|credits|créditos|balance|saldo|chatgpt|plus|pro|grok|supergrok|imagine|voice|build|cursor models|other models|on-demand|gemini|rpm|tpm|rpd|%|(?:R\$|US\$|\$|€)|^[0-9]+(?:\.[0-9]+)?[KMB]?$|^[0-9.]+[KMB]?\s*\/$|^[0-9.]+[KMB]?\s*\/\s*[0-9.]+[KMB]?$/i.test(x)),
+        .filter(x => /usage|uso|billing|cobrança|plan|free|gratuito|limit|weekly|semanal|rate|reset|remaining|restante|redefini|renova|auto renew|included usage|extra usage|credits|créditos|balance|saldo|chatgpt|plus|pro|grok|supergrok|imagine|voice|build|cursor models|other models|on-demand|gemini|rpm|tpm|rpd|perplexity|deepseek|openrouter|v0|midjourney|fast hours|fast time|queries|consultas|%|(?:R\$|US\$|\$|€)|^[0-9]+(?:\.[0-9]+)?[KMB]?$|^[0-9.]+[KMB]?\s*\/$|^[0-9.]+[KMB]?\s*\/\s*[0-9.]+[KMB]?$/i.test(x)),
       meters: Array.from(document.querySelectorAll('progress,[role="progressbar"]')).map(x => ({
         value: x.value ?? x.getAttribute('aria-valuenow'),
         max: x.max ?? x.getAttribute('aria-valuemax'),
