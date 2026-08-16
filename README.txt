@@ -1,4 +1,4 @@
-CreditWatch v0.11.6 (Build 26)
+CreditWatch v0.11.7 (Build 27)
 Monitor de cotas e creditos de ferramentas de IA para macOS.
 GitHub: https://github.com/pablomichelin/CreditWatch
 

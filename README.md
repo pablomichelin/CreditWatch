@@ -6,7 +6,7 @@
 
 [![macOS](https://img.shields.io/badge/macOS-Sonoma%2014%2B%20%7C%20Sequoia-black?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/pablomichelin/CreditWatch/releases/latest)
 [![Swift](https://img.shields.io/badge/Swift-6.0%20%7C%20SwiftUI-F05138?style=for-the-badge&logo=swift&logoColor=white)](https://github.com/pablomichelin/CreditWatch)
-[![Release](https://img.shields.io/badge/Release-v0.11.6-2ea44f?style=for-the-badge&logo=github)](https://github.com/pablomichelin/CreditWatch/releases/latest)
+[![Release](https://img.shields.io/badge/Release-v0.11.7-2ea44f?style=for-the-badge&logo=github)](https://github.com/pablomichelin/CreditWatch/releases/latest)
 [![Privacy](https://img.shields.io/badge/Privacy-100%25%20Local-blue?style=for-the-badge&logo=lock)](https://github.com/pablomichelin/CreditWatch)
 
 <br/>
@@ -15,7 +15,17 @@
 
 <br/>
 
-[📥 **Baixar CreditWatch para macOS (v0.11.6)**](https://github.com/pablomichelin/CreditWatch/releases/latest) • [Instalação](#-instalação) • [Provedores Suportados](#-provedores-suportados) • [Privacidade](#-privacidade-e-segurança)
+[📥 **Baixar CreditWatch para macOS (v0.11.7)**](https://github.com/pablomichelin/CreditWatch/releases/latest) • [Instalação](#-instalação) • [Provedores Suportados](#-provedores-suportados) • [Privacidade](#-privacidade-e-segurança)
+
+<br/>
+
+### 📱 Telas do Aplicativo em Funcionamento
+
+<p align="center">
+  <img src="docs/assets/menubar-preview.jpg" alt="Menu Bar do CreditWatch em Funcionamento" width="48%" />
+  &nbsp;
+  <img src="docs/assets/settings-preview.jpg" alt="Configurações e Contas Conectadas do CreditWatch" width="48%" />
+</p>
 
 </div>
 
@@ -49,7 +59,7 @@
 
 ### Opção 1: Download Direto (Recomendado)
 1. Baixe o pacote zip mais recente em [**Releases**](https://github.com/pablomichelin/CreditWatch/releases/latest);
-2. Descompacte o arquivo `CreditWatch-v0.11.6-macOS.zip`;
+2. Descompacte o arquivo `CreditWatch-v0.11.7-macOS.zip`;
 3. Arraste o **CreditWatch.app** para a sua pasta **Aplicativos**.
 
 ### Opção 2: Compilar a partir do Código-Fonte

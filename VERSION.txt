@@ -1,3 +1,3 @@
 CreditWatch
-Versao: 0.11.6 (Build 26)
+Versao: 0.11.7 (Build 27)
 Projeto: https://github.com/pablomichelin/CreditWatch
