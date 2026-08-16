@@ -48,6 +48,10 @@ struct CreditWatchMenuBarLabel: View {
 struct UsageMenu: View {
     @EnvironmentObject private var store: UsageStore
 
+    private var connectedProviders: [ProviderUsage] {
+        store.providers.filter { $0.enabled && ($0.remaining >= 0 || $0.detail != nil || $0.lastUpdatedAt != nil) }
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(spacing: 10) {
@@ -61,17 +65,29 @@ struct UsageMenu: View {
                         .font(.caption).foregroundStyle(.secondary)
                 }
             }
-            if store.providers.filter(\.enabled).isEmpty {
-                Text("Nenhum provedor ativo").foregroundStyle(.secondary)
-            }
-            ScrollView {
-                LazyVStack(spacing: 4) {
-                    ForEach(store.providers.filter(\.enabled)) { provider in
-                        ProviderRow(provider: provider, compact: true)
+            if connectedProviders.isEmpty {
+                VStack(spacing: 8) {
+                    Text("Nenhuma IA conectada")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                    SettingsLink {
+                        Label("Conectar nas Configurações", systemImage: "plus.circle")
+                    }
+                    .buttonStyle(.bordered)
+                    .controlSize(.small)
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 20)
+            } else {
+                ScrollView {
+                    LazyVStack(spacing: 4) {
+                        ForEach(connectedProviders) { provider in
+                            ProviderRow(provider: provider, compact: true)
+                        }
                     }
                 }
+                .frame(height: min(CGFloat(connectedProviders.count * 52), 300))
             }
-            .frame(height: 300)
             HStack(spacing: 6) {
                 Text(store.refreshStatus)
                     .font(.caption2)
@@ -140,6 +156,10 @@ struct UsageMenu: View {
 struct DashboardView: View {
     @EnvironmentObject private var store: UsageStore
 
+    private var connectedProviders: [ProviderUsage] {
+        store.providers.filter { $0.enabled && ($0.remaining >= 0 || $0.detail != nil || $0.lastUpdatedAt != nil) }
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 18) {
             HStack(spacing: 14) {
@@ -153,12 +173,33 @@ struct DashboardView: View {
                 SettingsLink { Label("Configurar", systemImage: "gearshape") }
             }
             Divider()
-            ScrollView {
+            if connectedProviders.isEmpty {
                 VStack(spacing: 12) {
-                    ForEach(store.providers.filter(\.enabled)) { provider in
-                        ProviderRow(provider: provider)
-                            .padding(12)
-                            .background(.quaternary, in: .rect(cornerRadius: 12))
+                    Spacer()
+                    Image(systemName: "sparkles")
+                        .font(.system(size: 36))
+                        .foregroundStyle(.secondary)
+                    Text("Nenhuma IA conectada ainda")
+                        .font(.title3)
+                        .fontWeight(.semibold)
+                    Text("Acesse as Configurações para conectar suas contas e acompanhar cotas.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    SettingsLink {
+                        Label("Conectar Contas", systemImage: "plus.circle")
+                    }
+                    .buttonStyle(.borderedProminent)
+                    Spacer()
+                }
+                .frame(maxWidth: .infinity)
+            } else {
+                ScrollView {
+                    VStack(spacing: 12) {
+                        ForEach(connectedProviders) { provider in
+                            ProviderRow(provider: provider)
+                                .padding(12)
+                                .background(.quaternary, in: .rect(cornerRadius: 12))
+                        }
                     }
                 }
             }

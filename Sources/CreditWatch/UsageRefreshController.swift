@@ -65,16 +65,20 @@ final class UsageRefreshController: NSObject, WKNavigationDelegate {
         guard let store else { return }
         lastRefreshAt = .now
         store.setRefreshing(true)
-        let enabledKinds = Set(store.providers.filter(\.enabled).map(\.kind))
+        
+        // Consulta apenas provedores habilitados que estejam conectados (com dados ou Antigravity local)
+        let connectedKinds = Set(store.providers.filter { provider in
+            provider.enabled && (provider.remaining >= 0 || provider.detail != nil || provider.lastUpdatedAt != nil || provider.kind == .antigravity)
+        }.map(\.kind))
 
-        // Cleanup: remove WebViews de providers desabilitados (evita memory leak)
-        let toRemove = webViews.keys.filter { !enabledKinds.contains($0) }
+        // Cleanup: remove WebViews de provedores desconectados ou desabilitados (evita memory leak)
+        let toRemove = webViews.keys.filter { !connectedKinds.contains($0) }
         for kind in toRemove {
             webViews[kind]?.navigationDelegate = nil
             webViews.removeValue(forKey: kind)
         }
 
-        for kind in enabledKinds where kind != .antigravity {
+        for kind in connectedKinds where kind != .antigravity {
             guard let url = kind.usageURL else { continue }
             let webView = webView(for: kind)
             var request = URLRequest(url: url)
@@ -82,7 +86,7 @@ final class UsageRefreshController: NSObject, WKNavigationDelegate {
             request.timeoutInterval = 25
             webView.load(request)
         }
-        if enabledKinds.contains(.antigravity) {
+        if connectedKinds.contains(.antigravity) {
             Task { [weak self] in
                 guard let self, let data = await AntigravityUsageClient.fetch() else { return }
                 _ = self.store?.importAntigravityUsage(data)

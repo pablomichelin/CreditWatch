@@ -233,11 +233,11 @@ final class UsageStore: ObservableObject {
     }
 
     var menuBarTitle: String {
-        let active = providers.filter(\.enabled)
-        guard !active.isEmpty else { return "IA" }
-        // Alerta quando algum provider ativo tem cota crítica (<= 10%)
-        let hasCritical = active.contains(where: { $0.remaining >= 0 && $0.remaining <= 10 })
-        return hasCritical ? "IA !" : "IA \(active.count)"
+        let connected = providers.filter { $0.enabled && ($0.remaining >= 0 || $0.detail != nil || $0.lastUpdatedAt != nil) }
+        guard !connected.isEmpty else { return "IA" }
+        // Alerta quando algum provider conectado tem cota crítica (<= 10%)
+        let hasCritical = connected.contains(where: { $0.remaining >= 0 && $0.remaining <= 10 })
+        return hasCritical ? "IA !" : "IA \(connected.count)"
     }
 
     var lastUpdatedAt: Date? {
