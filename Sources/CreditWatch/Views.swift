@@ -82,6 +82,29 @@ struct UsageMenu: View {
                 }
                 .help("Atualizar agora")
             }
+            if store.updateChecker.updateAvailable, let version = store.updateChecker.latestVersion {
+                HStack(spacing: 8) {
+                    Image(systemName: "sparkles")
+                        .foregroundStyle(.yellow)
+                    VStack(alignment: .leading, spacing: 1) {
+                        Text("Nova versão v\(version)")
+                            .font(.caption)
+                            .fontWeight(.semibold)
+                        Text("Clique para atualizar")
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                    }
+                    Spacer()
+                    Button(store.updateChecker.isDownloading ? "Baixando…" : "Atualizar") {
+                        store.updateChecker.downloadAndInstall()
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .controlSize(.small)
+                    .disabled(store.updateChecker.isDownloading)
+                }
+                .padding(8)
+                .background(.yellow.opacity(0.12), in: .rect(cornerRadius: 8))
+            }
             Divider()
             HStack(spacing: 14) {
                 SettingsLink { Label("Configurar", systemImage: "gearshape") }

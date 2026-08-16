@@ -76,7 +76,13 @@ struct ProviderUsage: Identifiable, Codable, Equatable {
 
 @MainActor
 final class UsageStore: ObservableObject {
-    @Published var providers: [ProviderUsage] { didSet { save() } }
+    @Published var providers: [ProviderUsage] {
+        didSet {
+            save()
+            NotificationManager.shared.checkAndNotify(providers: providers)
+        }
+    }
+    @Published var updateChecker = UpdateChecker()
     @Published private(set) var isRefreshing = false
 
     private let storageURL: URL
@@ -107,6 +113,7 @@ final class UsageStore: ObservableObject {
     }
 
     func startAutoRefresh() {
+        updateChecker.checkForUpdates()
         guard refreshController == nil else { return }
         let controller = UsageRefreshController(store: self)
         refreshController = controller
