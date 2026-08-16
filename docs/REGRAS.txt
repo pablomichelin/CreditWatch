@@ -42,3 +42,11 @@ Versao: 0.11.4 (Build 24)
 - O frame das WebViews em background deve manter tamanho minimo (ex: 800x600)
   para evitar throttling por parte do WebKit do macOS.
 ================================================================================
+
+5. REGRA DE DOCUMENTACAO (.MD LOCAL VS GITHUB)
+--------------------------------------------------------------------------------
+- No computador local, a documentacao oficial e mantida no formato rico .md.
+- No repositorio Git / GitHub, arquivos .md sao estritamente ignorados via
+  .gitignore para que o repositorio remoto contenha apenas codigo e arquivos
+  normais, sem arquivos .md.
+================================================================================
