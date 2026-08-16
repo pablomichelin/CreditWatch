@@ -1,0 +1,3 @@
+CreditWatch
+Versao: 0.11.4 (Build 24)
+Desenvolvido por Pablo Michelin.
