@@ -1,7 +1,6 @@
-CreditWatch v0.11.5 (Build 25)
-Desenvolvido por Pablo Michelin.
-
-Aplicativo de barra de menus para macOS (Sonoma 14+) para monitoramento de cotas, creditos e limites de servicos.
+CreditWatch v0.11.6 (Build 26)
+Monitor de cotas e creditos de ferramentas de IA para macOS.
+GitHub: https://github.com/pablomichelin/CreditWatch
 
 Instalacao:
 cd ~/Documents/IA-Local-Pablo/CreditWatch

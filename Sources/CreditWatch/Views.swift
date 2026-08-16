@@ -4,6 +4,7 @@ import ServiceManagement
 
 enum AppInfo {
     static let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "dev"
+    static let projectURL = URL(string: "https://github.com/pablomichelin/CreditWatch")!
     static var reportErrorURL: URL {
         var components = URLComponents()
         components.scheme = "mailto"
@@ -96,10 +97,16 @@ struct UsageMenu: View {
             .buttonStyle(.borderless)
             .controlSize(.small)
             .foregroundStyle(.secondary)
-            Text("CreditWatch v\(AppInfo.version) · Pablo Michelin")
-                .frame(maxWidth: .infinity, alignment: .center)
-                .font(.caption2)
-                .foregroundStyle(.tertiary)
+            Link(destination: AppInfo.projectURL) {
+                HStack(spacing: 4) {
+                    Text("CreditWatch v\(AppInfo.version)")
+                    Image(systemName: "arrow.up.right")
+                        .font(.system(size: 8))
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .center)
+            .font(.caption2)
+            .foregroundStyle(.tertiary)
         }
         .padding(12)
         .frame(width: 320)
@@ -132,8 +139,14 @@ struct DashboardView: View {
                     }
                 }
             }
-            Text("CreditWatch v\(AppInfo.version) · Desenvolvido por Pablo Michelin")
-                .font(.caption).foregroundStyle(.tertiary)
+            Link(destination: AppInfo.projectURL) {
+                HStack(spacing: 4) {
+                    Text("CreditWatch v\(AppInfo.version) · Ver no GitHub")
+                    Image(systemName: "arrow.up.right")
+                        .font(.caption2)
+                }
+            }
+            .font(.caption).foregroundStyle(.tertiary)
         }
         .padding(24)
         .frame(minWidth: 580, minHeight: 480)
@@ -329,11 +342,17 @@ struct SettingsView: View {
                         .stroke(.quaternary, lineWidth: 1)
                 }
                 if let launchError { Text(launchError).font(.caption).foregroundStyle(.red) }
-                Text("v\(AppInfo.version) · Desenvolvido por Pablo Michelin")
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .font(.caption2)
-                    .foregroundStyle(.tertiary)
-                    .padding(.top, 2)
+                Link(destination: AppInfo.projectURL) {
+                    HStack(spacing: 4) {
+                        Text("CreditWatch v\(AppInfo.version) · Projeto no GitHub")
+                        Image(systemName: "arrow.up.right")
+                            .font(.system(size: 8))
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .center)
+                .font(.caption2)
+                .foregroundStyle(.tertiary)
+                .padding(.top, 2)
             }
         }
         .padding()
