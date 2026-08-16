@@ -1,0 +1,8 @@
+.DS_Store
+.build/
+dist/
+*.zip
+BrowserExtension-Safari/build/
+BrowserExtension-Safari/generated/
+*.swp
+*~
