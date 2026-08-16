@@ -2,7 +2,7 @@
 .build/
 dist/
 *.zip
-docs/*.md
+docs/
 VERSION.md
 EXTENSOES.md
 BrowserExtension-Safari/build/
