@@ -5,7 +5,7 @@
 ### Monitor de Créditos e Limites de Ferramentas de IA para macOS
 
 [![macOS](https://img.shields.io/badge/macOS-Sonoma%2014%2B%20%7C%20Sequoia-black?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/pablomichelin/CreditWatch/releases/latest)
-[![Release](https://img.shields.io/badge/Versão-v0.13.0-2ea44f?style=for-the-badge&logo=github)](https://github.com/pablomichelin/CreditWatch/releases/latest)
+[![Release](https://img.shields.io/badge/Versão-v0.13.1-2ea44f?style=for-the-badge&logo=github)](https://github.com/pablomichelin/CreditWatch/releases/latest)
 [![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-Apoiar-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/pablomichelin)
 [![Privacidade](https://img.shields.io/badge/Privacidade-100%25%20Local-blue?style=for-the-badge&logo=lock)](https://github.com/pablomichelin/CreditWatch)
 
@@ -61,7 +61,7 @@
 
 ## 🚀 Como Instalar e Usar
 
-1. Baixe o instalador oficial em [**Releases Oficiais**](https://github.com/pablomichelin/CreditWatch/releases/latest) (`CreditWatch-v0.13.0.dmg`);
+1. Baixe o instalador oficial em [**Releases Oficiais**](https://github.com/pablomichelin/CreditWatch/releases/latest) (`CreditWatch-v0.13.1.dmg`);
 2. Abra o arquivo `.dmg` com dois cliques;
 3. Arraste o ícone do **CreditWatch** para a sua pasta **Aplicativos**;
 4. Abra o aplicativo na barra de menus, clique em **Configurar** e conecte as IAs que você utiliza.
