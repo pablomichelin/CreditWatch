@@ -37,7 +37,14 @@ final class CreditWatchAppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func isMainWindow(_ window: NSWindow) -> Bool {
-        window.title == "CreditWatch" || window.title == "CreditWatch Settings"
+        // Detecta pelo identifier da janela ao invés do título localizado,
+        // para não quebrar caso o macOS localize o título em versões futuras.
+        if let id = window.identifier?.rawValue {
+            return id.contains("CreditWatch")
+        }
+        // Fallback: títulos conhecidos em pt-BR e en
+        let knownTitles = ["CreditWatch", "CreditWatch Settings", "Configurações"]
+        return knownTitles.contains(window.title)
     }
 }
 

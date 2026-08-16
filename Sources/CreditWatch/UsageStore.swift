@@ -98,8 +98,14 @@ struct ProviderUsage: Identifiable, Codable, Equatable {
 final class UsageStore: ObservableObject {
     @Published var providers: [ProviderUsage] {
         didSet {
-            save()
-            NotificationManager.shared.checkAndNotify(providers: providers)
+            // Debounce: colapsa writes múltiplos de um mesmo ciclo de refresh em um único write
+            saveDebounceTask?.cancel()
+            saveDebounceTask = Task { @MainActor [weak self] in
+                try? await Task.sleep(for: .milliseconds(300))
+                guard !Task.isCancelled, let self else { return }
+                self.saveNow()
+                NotificationManager.shared.checkAndNotify(providers: self.providers)
+            }
         }
     }
     @Published var updateChecker = UpdateChecker()
@@ -107,6 +113,7 @@ final class UsageStore: ObservableObject {
 
     private let storageURL: URL
     private var refreshController: UsageRefreshController?
+    private var saveDebounceTask: Task<Void, Never>?
 
     init() {
         let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
@@ -119,7 +126,9 @@ final class UsageStore: ObservableObject {
     var menuBarTitle: String {
         let active = providers.filter(\.enabled)
         guard !active.isEmpty else { return "IA" }
-        return active.contains(where: { ($0.resetsAt ?? .distantFuture) <= .now }) ? "IA !" : "IA \(active.count)"
+        // Alerta quando algum provider ativo tem cota crítica (<= 10%)
+        let hasCritical = active.contains(where: { $0.remaining >= 0 && $0.remaining <= 10 })
+        return hasCritical ? "IA !" : "IA \(active.count)"
     }
 
     var lastUpdatedAt: Date? {
@@ -150,6 +159,8 @@ final class UsageStore: ObservableObject {
     }
 
     func addAccount(kind: ProviderKind) {
+        // Guard: não adiciona se o provider já está presente
+        guard !providers.contains(where: { $0.kind == kind }) else { return }
         let metrics = ProviderUsage.defaults.filter { $0.kind == kind }
         if !metrics.isEmpty {
             providers.append(contentsOf: metrics)
@@ -385,13 +396,19 @@ final class UsageStore: ObservableObject {
                 guard let name = names[bucket.bucketId], let fraction = bucket.remainingFraction else { continue }
                 update(name: name, remaining: Int((fraction * 100).rounded()), unit: "% restante",
                        detail: group.displayName, resetLabel: nil)
-                if let value = bucket.resetTime, let date = ISO8601DateFormatter().date(from: value) {
+                if let value = bucket.resetTime, let date = {
+                    let f = ISO8601DateFormatter()
+                    f.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+                    return f.date(from: value) ?? ISO8601DateFormatter().date(from: value)
+                }() {
                     setReset(names: [name], at: date)
                 }
                 count += 1
             }
         }
-        return count == 4
+        // Considera sucesso se ao menos 1 bucket foi atualizado (comportamento resiliente
+        // durante manutenção ou migração de planos, quando nem todos os 4 buckets retornam)
+        return count > 0
     }
 
     private func updateQuotaMetrics(
@@ -460,13 +477,33 @@ final class UsageStore: ObservableObject {
     private func moneyUsage(after heading: String, in text: String) -> (used: Double, limit: Double)? {
         guard let range = text.range(of: heading, options: .caseInsensitive) else { return nil }
         let suffix = String(text[range.lowerBound...])
-        let pattern = #"(?:US)?\$\s*([0-9]+(?:\.[0-9]+)?)\s*/\s*(?:US)?\$\s*([0-9]+(?:\.[0-9]+)?)"#
+        // Aceita notação US ($1,200.50) e europeia/BR ($1.200,50)
+        let pattern = #"(?:US)?\$\s*([0-9]+(?:[.,][0-9]+)*)\s*/\s*(?:US)?\$\s*([0-9]+(?:[.,][0-9]+)*)"#
         guard let expression = try? NSRegularExpression(pattern: pattern),
               let match = expression.firstMatch(in: suffix, range: NSRange(suffix.startIndex..., in: suffix)),
               let first = Range(match.range(at: 1), in: suffix),
               let second = Range(match.range(at: 2), in: suffix),
-              let used = Double(suffix[first]), let limit = Double(suffix[second]), limit > 0 else { return nil }
+              let used = parseMoneyDecimal(String(suffix[first])),
+              let limit = parseMoneyDecimal(String(suffix[second])),
+              limit > 0 else { return nil }
         return (used, limit)
+    }
+
+    /// Converte strings de valor monetário em Double, suportando notação US e europeia.
+    private func parseMoneyDecimal(_ value: String) -> Double? {
+        let clean = value.replacingOccurrences(of: " ", with: "")
+        // Formato US: 1,200.50 (vírgula como separador de milhar, ponto como decimal)
+        if clean.contains(".") && clean.contains(",") {
+            return Double(clean.replacingOccurrences(of: ",", with: ""))
+        }
+        // Formato EU/BR: 1.200,50 (ponto como separador de milhar, vírgula como decimal)
+        if clean.contains(",") {
+            let euFormat = clean
+                .replacingOccurrences(of: ".", with: "")
+                .replacingOccurrences(of: ",", with: ".")
+            return Double(euFormat)
+        }
+        return Double(clean)
     }
 
     private func creditBalance(in text: String) -> String? {
@@ -547,6 +584,7 @@ final class UsageStore: ObservableObject {
             ]
             let formatter = DateFormatter()
             formatter.locale = Locale(identifier: "en_US_POSIX")
+            formatter.timeZone = TimeZone(identifier: "UTC")
             for format in formats {
                 formatter.dateFormat = format
                 if let date = formatter.date(from: value) { return date }
@@ -590,14 +628,17 @@ final class UsageStore: ObservableObject {
 
     private static func normalized(_ existing: [ProviderUsage]) -> [ProviderUsage] {
         var result = existing
-        // Migração da primeira interface, que expunha campos manuais e criava
-        // linhas incompletas. Os dados anteriores eram todos demonstrativos.
-        if result.contains(where: { $0.name == "Cursor" || $0.name == "Codex" }) {
+        // Migração da primeira interface (v0.9 e anterior):
+        // nomes curtos sem sufixo indicam schema antigo — reseta para defaults.
+        let legacyNames: Set<String> = ["Cursor", "Codex", "Gemini"]
+        if result.contains(where: { legacyNames.contains($0.name) }) {
             return ProviderUsage.defaults
         }
+        // Remove entradas obsoletas que foram renomeadas ou substituídas
+        let obsoleteNames: Set<String> = ["Antigravity · RPM", "Antigravity · TPM", "Antigravity · RPD"]
         result.removeAll {
             $0.kind == .custom || $0.name == "Gemini"
-                || ($0.kind == .antigravity && ["Antigravity · RPM", "Antigravity · TPM", "Antigravity · RPD"].contains($0.name))
+                || ($0.kind == .antigravity && obsoleteNames.contains($0.name))
         }
         for index in result.indices where result[index].detail != nil {
             result[index].detail = result[index].detail?
@@ -615,8 +656,13 @@ final class UsageStore: ObservableObject {
         return result
     }
 
-    private func save() {
-        guard let data = try? JSONEncoder().encode(providers) else { return }
-        try? data.write(to: storageURL, options: [.atomic])
+    private func saveNow() {
+        do {
+            let data = try JSONEncoder().encode(providers)
+            try data.write(to: storageURL, options: [.atomic])
+        } catch {
+            // Log sem crash — o dado será gravado no próximo ciclo de debounce
+            print("[CreditWatch] Erro ao salvar usage.json: \(error.localizedDescription)")
+        }
     }
 }

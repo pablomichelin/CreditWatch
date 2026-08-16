@@ -94,9 +94,8 @@ struct ProviderWebView: NSViewRepresentable {
 
     func makeNSView(context: Context) -> WKWebView {
         webView.navigationDelegate = context.coordinator
-        if url?.host == "grok.com" {
-            webView.customUserAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Safari/605.1.15"
-        }
+        // Regra 4 do CORTEX: User-Agent oficial desktop Safari em todas as consultas de fundo
+        webView.customUserAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Safari/605.1.15"
         if let url { webView.load(URLRequest(url: url)) }
         return webView
     }

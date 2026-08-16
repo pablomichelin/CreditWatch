@@ -31,6 +31,8 @@ final class UsageRefreshController: NSObject, WKNavigationDelegate {
     private var webViews: [ProviderKind: WKWebView] = [:]
     private var timer: Timer?
     private var observers: [NSObjectProtocol] = []
+    private var lastRefreshAt: Date = .distantPast
+    private let minimumRefreshInterval: TimeInterval = 15 // segundos mínimos entre refreshes
 
     init(store: UsageStore) {
         self.store = store
@@ -47,15 +49,31 @@ final class UsageRefreshController: NSObject, WKNavigationDelegate {
         observers.append(workspaceCenter.addObserver(forName: NSWorkspace.didWakeNotification, object: nil, queue: .main) { [weak self] _ in
             Task { @MainActor in self?.refreshAll() }
         })
+        // didBecomeActiveNotification tem debounce: ignora se o último refresh foi há menos de 15s
         observers.append(NotificationCenter.default.addObserver(forName: NSApplication.didBecomeActiveNotification, object: nil, queue: .main) { [weak self] _ in
-            Task { @MainActor in self?.refreshAll() }
+            Task { @MainActor in self?.refreshIfNeeded() }
         })
+    }
+
+    /// Refresh com guard de tempo mínimo — evita avalanche ao abrir o menu repetidamente.
+    func refreshIfNeeded() {
+        guard Date().timeIntervalSince(lastRefreshAt) >= minimumRefreshInterval else { return }
+        refreshAll()
     }
 
     func refreshAll() {
         guard let store else { return }
+        lastRefreshAt = .now
         store.setRefreshing(true)
         let enabledKinds = Set(store.providers.filter(\.enabled).map(\.kind))
+
+        // Cleanup: remove WebViews de providers desabilitados (evita memory leak)
+        let toRemove = webViews.keys.filter { !enabledKinds.contains($0) }
+        for kind in toRemove {
+            webViews[kind]?.navigationDelegate = nil
+            webViews.removeValue(forKey: kind)
+        }
+
         for kind in enabledKinds where kind != .antigravity {
             guard let url = kind.usageURL else { continue }
             let webView = webView(for: kind)
@@ -117,8 +135,8 @@ enum AntigravityUsageClient {
     }
 
     static func fetch() async -> Data? {
-        for service in discoverServices() {
-            for port in listeningPorts(for: service.pid) {
+        for service in await discoverServices() {
+            for port in await listeningPorts(for: service.pid) {
                 guard let url = URL(string: "http://127.0.0.1:\(port)/exa.language_server_pb.LanguageServerService/RetrieveUserQuotaSummary") else { continue }
                 var request = URLRequest(url: url)
                 request.httpMethod = "POST"
@@ -136,8 +154,8 @@ enum AntigravityUsageClient {
         return nil
     }
 
-    private static func discoverServices() -> [LocalService] {
-        guard let output = run("/bin/ps", ["-axo", "pid=,command="]) else { return [] }
+    private static func discoverServices() async -> [LocalService] {
+        guard let output = await run("/bin/ps", ["-axo", "pid=,command="]) else { return [] }
         let candidates = output.split(separator: "\n").map(String.init).filter {
             ($0.contains("language_server_macos_arm") || $0.contains("language_server_macos_x64") || $0.contains("language_server_macos"))
                 && $0.contains("--csrf_token")
@@ -155,8 +173,8 @@ enum AntigravityUsageClient {
         }
     }
 
-    private static func listeningPorts(for pid: Int) -> [Int] {
-        guard let output = run("/usr/sbin/lsof", ["-nP", "-a", "-p", String(pid), "-iTCP", "-sTCP:LISTEN"]) else { return [] }
+    private static func listeningPorts(for pid: Int) async -> [Int] {
+        guard let output = await run("/usr/sbin/lsof", ["-nP", "-a", "-p", String(pid), "-iTCP", "-sTCP:LISTEN"]) else { return [] }
         let pattern = #"127\.0\.0\.1:([0-9]+) \(LISTEN\)"#
         guard let expression = try? NSRegularExpression(pattern: pattern) else { return [] }
         return expression.matches(in: output, range: NSRange(output.startIndex..., in: output)).compactMap { match in
@@ -165,19 +183,30 @@ enum AntigravityUsageClient {
         }
     }
 
-    private static func run(_ executable: String, _ arguments: [String]) -> String? {
-        let process = Process()
-        let pipe = Pipe()
-        process.executableURL = URL(fileURLWithPath: executable)
-        process.arguments = arguments
-        process.standardOutput = pipe
-        process.standardError = FileHandle.nullDevice
-        guard (try? process.run()) != nil else { return nil }
-        // Leia o pipe enquanto o processo está ativo. Esperar antes pode
-        // bloquear quando `ps` produz mais dados que o buffer do pipe.
-        let data = pipe.fileHandleForReading.readDataToEndOfFile()
-        process.waitUntilExit()
-        guard process.terminationStatus == 0 else { return nil }
-        return String(data: data, encoding: .utf8)
+    /// Executa o processo em uma thread de background sem bloquear o executor cooperativo do Swift.
+    private static func run(_ executable: String, _ arguments: [String]) async -> String? {
+        await withCheckedContinuation { continuation in
+            DispatchQueue.global(qos: .utility).async {
+                let process = Process()
+                let pipe = Pipe()
+                process.executableURL = URL(fileURLWithPath: executable)
+                process.arguments = arguments
+                process.standardOutput = pipe
+                process.standardError = FileHandle.nullDevice
+                guard (try? process.run()) != nil else {
+                    continuation.resume(returning: nil)
+                    return
+                }
+                // Leia o pipe enquanto o processo está ativo. Esperar antes pode
+                // bloquear quando `ps` produz mais dados que o buffer do pipe.
+                let data = pipe.fileHandleForReading.readDataToEndOfFile()
+                process.waitUntilExit()
+                guard process.terminationStatus == 0 else {
+                    continuation.resume(returning: nil)
+                    return
+                }
+                continuation.resume(returning: String(data: data, encoding: .utf8))
+            }
+        }
     }
 }
