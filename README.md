@@ -5,7 +5,8 @@
 ### Monitor de Créditos e Limites de Ferramentas de IA para macOS
 
 [![macOS](https://img.shields.io/badge/macOS-Sonoma%2014%2B%20%7C%20Sequoia-black?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/pablomichelin/CreditWatch/releases/latest)
-[![Release](https://img.shields.io/badge/Versão-v0.11.8-2ea44f?style=for-the-badge&logo=github)](https://github.com/pablomichelin/CreditWatch/releases/latest)
+[![Release](https://img.shields.io/badge/Versão-v0.11.9-2ea44f?style=for-the-badge&logo=github)](https://github.com/pablomichelin/CreditWatch/releases/latest)
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-Apoiar-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/pablomichelin)
 [![Privacidade](https://img.shields.io/badge/Privacidade-100%25%20Local-blue?style=for-the-badge&logo=lock)](https://github.com/pablomichelin/CreditWatch)
 
 <br/>
@@ -14,7 +15,7 @@
 
 <br/>
 
-[📥 **Baixar Aplicativo para macOS (v0.11.8)**](https://github.com/pablomichelin/CreditWatch/releases/latest) • [Como Usar](#-como-instalar-e-usar) • [Serviços Suportados](#-ferramentas-de-ia-suportadas) • [Privacidade](#-privacidade-e-segurança)
+[📥 **Baixar Aplicativo para macOS (.dmg)**](https://github.com/pablomichelin/CreditWatch/releases/latest) • [Como Usar](#-como-instalar-e-usar) • [Serviços Suportados](#-ferramentas-de-ia-suportadas) • [Apoiar](#-apoie-o-projeto)
 
 <br/>
 
@@ -55,9 +56,9 @@
 
 ## 🚀 Como Instalar e Usar
 
-1. Baixe o aplicativo em [**Releases Oficiais**](https://github.com/pablomichelin/CreditWatch/releases/latest);
-2. Descompacte o arquivo baixado (`CreditWatch-v0.11.8-macOS.zip`);
-3. Arraste o **CreditWatch** para a sua pasta **Aplicativos**;
+1. Baixe o instalador oficial em [**Releases Oficiais**](https://github.com/pablomichelin/CreditWatch/releases/latest) (`CreditWatch-v0.11.9.dmg`);
+2. Abra o arquivo `.dmg` com dois cliques;
+3. Arraste o ícone do **CreditWatch** para a sua pasta **Aplicativos**;
 4. Abra o aplicativo na barra de menus, clique em **Configurar** e conecte as IAs que você utiliza.
 
 ---
@@ -67,6 +68,18 @@
 - **100% Local:** O CreditWatch não possui servidores externos e não envia nenhuma informação para terceiros.
 - **Sessões Protegidas:** As conexões com os painéis utilizam o armazenamento seguro oficial do macOS.
 - **Transparência:** Todos os dados de leitura são salvos exclusivamente no seu próprio computador.
+
+---
+
+## ☕ Apoie o Projeto
+
+Se o **CreditWatch** é útil para o seu dia a dia e te ajuda a economizar tempo acompanhando seus limites de IA, considere apoiar o desenvolvimento contínuo:
+
+<p align="left">
+  <a href="https://buymeacoffee.com/pablomichelin" target="_blank">
+    <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="50" />
+  </a>
+</p>
 
 ---
 
