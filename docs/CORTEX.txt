@@ -1,0 +1,60 @@
+================================================================================
+                CORTEX: GUIA MESTRE DE CONTEXTO DO PROJETO
+                  (Instrucoes Estruturais para Prompts e IAs)
+================================================================================
+Projeto: CreditWatch
+Desenvolvedor: Pablo Michelin
+Plataforma: macOS Sonoma (14.0+) / Sequoia
+Tecnologias: Swift 6, SwiftUI, AppKit, WebKit (WKWebView), ServiceManagement
+
+1. OBJETIVO DO PROJETO
+--------------------------------------------------------------------------------
+O CreditWatch e um aplicativo nativo para a barra de menus do macOS que
+monitora cotas, percentuais restantes, saldo de creditos e datas de renovacao
+das principais ferramentas de IA em um unico lugar, com foco rigoroso em
+privacidade e leitura em tempo real.
+
+2. ARQUITETURA DE ARQUIVOS
+--------------------------------------------------------------------------------
+CreditWatch/
+├── Package.swift                     -> Manifesto Swift Package Manager
+├── Resources/
+│   ├── Info.plist                    -> Metadados, versao, build, URL scheme (creditwatch://)
+│   ├── CreditWatch.icns              -> Icone oficial do app
+│   └── CreditWatch.iconset/          -> Conjunto de resolucoes do icone
+├── Scripts/
+│   ├── build-app.sh                  -> Compila em release, limpa xattr e assina o bundle
+│   └── install.sh                    -> Compila e instala em ~/Applications
+├── Sources/CreditWatch/
+│   ├── CreditWatchApp.swift          -> Entry point (@main), AppDelegate, MenuBarExtra, WindowGroup
+│   ├── UsageStore.swift              -> Modelo de dados (ProviderUsage), persistencia em usage.json,
+│   │                                    parsers de texto/regex e tratamento de datas
+│   ├── UsageRefreshController.swift  -> Ciclo de atualizacao em segundo plano a cada 60s,
+│   │                                    gerenciamento de WKWebViews e cliente RPC Antigravity
+│   ├── Views.swift                   -> Componentes visuais (MenuBarExtra window, Dashboard,
+│   │                                    SettingsView, ProviderRow, AccountEditor)
+│   └── ConnectProviderView.swift     -> Janela interativa de login/autenticacao de provedores
+├── BrowserExtension/                 -> Extensao de navegador para navegadores Chromium (MV3)
+├── BrowserExtension-Firefox/         -> Extensao para Mozilla Firefox (MV3)
+├── BrowserExtension-Safari/          -> Extensao nativa para Safari (App Extension)
+└── docs/                             -> Documentacao tecnica e governanca
+
+3. FLUXO DE DADOS
+--------------------------------------------------------------------------------
+[Provedor Web] -> [WKWebView Background / ConnectProviderView]
+               -> [VisiblePageSnapshot.script (JS DOM Extraction)]
+               -> [UsageStore.importVisibleUsage (Regex / Logic Parser)]
+               -> [UsageStore.providers Published State]
+               -> [usage.json Storage] & [SwiftUI Views Update]
+
+[Antigravity Local] -> [AntigravityUsageClient.fetch (ps + lsof + RPC)]
+                    -> [UsageStore.importAntigravityUsage]
+                    -> [UsageStore.providers Published State]
+
+4. REGRAS OBRIGATORIAS PARA QUALQUER PROMPT OU ASSISTENTE
+--------------------------------------------------------------------------------
+- NUNCA altere o design visual (Views.swift) sem solicitacao expressa.
+- SEMPRE incremente a versao e o build number a cada alteracao.
+- NUNCA armazene credenciais ou senhas em texto puro.
+- Garanta que todas as chamadas de build utilizem os scripts oficiais em Scripts/.
+================================================================================

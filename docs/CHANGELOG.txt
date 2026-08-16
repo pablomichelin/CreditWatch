@@ -1,0 +1,39 @@
+================================================================================
+                           HISTORICO DE VERSOES (CHANGELOG)
+                                     CREDITWATCH
+================================================================================
+Desenvolvido por Pablo Michelin.
+
+## 0.11.4 (Build 24)
+- Padronizacao completa da governanca do projeto e documentacao tecnica na pasta docs/ (REGRAS, VERSIONAMENTO, ROADMAP, CORTEX e CHANGELOG);
+- Criacao de README.md profissional para exibicao publica no GitHub;
+- Limpeza e remocao de arquivos nao essenciais.
+
+## 0.11.3 (Build 23)
+- Adicao do indicador 'Conectado' com icone de confirmacao verde para contas autenticadas;
+- Alteracao dinamica do botao de acao para 'Reconectar' quando a conta estiver ativa;
+- Padronizacao do User-Agent oficial desktop Safari para todas as consultas em segundo plano;
+- Aprimoramento do polling de leitura para SPAs dinamicas (ChatGPT, Codex, Cursor e Gemini).
+
+## 0.11.2 (Build 22)
+- Suporte flexivel e dinamico a modelos Gemini (1.5 Flash, 2.0 Flash, 2.5 Flash) no Google AI Studio;
+- Compatibilidade da descoberta local do Antigravity com arquiteturas Apple Silicon e Intel;
+- Expansao do parser de datas de renovacao em portugues e ingles;
+- Ajuste no manifest da extensao Chromium para conformidade estrita com Manifest V3;
+- Otimizacao do frame do WebKit em segundo plano.
+
+## 0.11.1 (Build 21)
+- Reorganizacao das opcoes do aplicativo em cartao minimalista;
+- Alinhamento do switch de inicializacao e transformacao do reporte de erro em acao discreta.
+
+## 0.11.0
+- Atualizacao automatica ao iniciar, abrir a previa, voltar do repouso e a cada 60 segundos;
+- Endereco oficial de Uso do Codex e exibicao do saldo de creditos;
+- Integracao direta com servico local do Antigravity via RPC com token efemero em memoria.
+
+## 0.10.0
+- Adicao do Grok com login no painel oficial de Usage e calculo de limite semanal SuperGrok.
+
+## 0.9.0
+- Separacao de ChatGPT e Codex com leitura informativa do plano.
+================================================================================

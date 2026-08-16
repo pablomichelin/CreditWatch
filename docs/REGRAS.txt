@@ -1,0 +1,44 @@
+================================================================================
+                    REGRAS DE GOVERNANCA E DESENVOLVIMENTO
+                               CREDITWATCH
+================================================================================
+Autor: Pablo Michelin
+Versao: 0.11.4 (Build 24)
+
+1. REGRA VISUAL (UI CONGELADA)
+--------------------------------------------------------------------------------
+- E expressamente proibido alterar o design, cores, tipografia, espacamentos
+  ou layout dos componentes em Sources/CreditWatch/Views.swift e
+  Sources/CreditWatch/ConnectProviderView.swift sem solicitacao direta e explicita.
+- O aplicativo possui identidade visual consolidada e minimalista.
+- Qualquer alteracao deve focar exclusivamente na camada de logica, parsers,
+  resiliencia de rede e correcao de bugs.
+
+2. REGRA DE VERSIONAMENTO CONTINUO
+--------------------------------------------------------------------------------
+- Toda e qualquer modificacao nos arquivos do projeto DEVE ser acompanhada do
+  incremento da versao (SemVer) e do numero de build (CFBundleVersion).
+- Arquivos obrigatorios a atualizar:
+  1. Resources/Info.plist (CFBundleShortVersionString e CFBundleVersion)
+  2. VERSION.txt
+  3. docs/CHANGELOG.txt
+  4. README.md e README.txt
+
+3. REGRA DE PRIVACIDADE E SEGURANCA
+--------------------------------------------------------------------------------
+- O CreditWatch opera 100% em modo local no macOS do usuario.
+- Nunca ler senhas, Keychain global ou cookies de navegadores externos.
+- As sessoes web ficam restritas ao WKWebsiteDataStore padrao do macOS.
+- O token efemero do Antigravity (x-codeium-csrf-token) deve permanecer
+  unicamente em memoria durante a consulta RPC local e NUNCA ser gravado em disco.
+- Os dados do usuario sao salvos exclusivamente em:
+  ~/Library/Application Support/CreditWatch/usage.json
+
+4. REGRA DE REQUISICOES EM SEGUNDO PLANO
+--------------------------------------------------------------------------------
+- Todas as instancias de WKWebView e consultas de rede em segundo plano
+  devem utilizar User-Agent oficial de desktop Safari macOS para evitar
+  bloqueios anti-bot ou desafios Cloudflare.
+- O frame das WebViews em background deve manter tamanho minimo (ex: 800x600)
+  para evitar throttling por parte do WebKit do macOS.
+================================================================================
