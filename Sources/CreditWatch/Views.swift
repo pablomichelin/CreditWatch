@@ -192,10 +192,29 @@ struct ProviderRow: View {
         return "\(available)% restante"
     }
     private var resetText: String {
-        if let resetLabel = provider.resetLabel { return resetLabel }
-        guard let resetsAt = provider.resetsAt else { return "Conecte para ver a renovação" }
-        if resetsAt <= .now { return "renovação pendente" }
-        return "volta a 100% " + resetsAt.formatted(.relative(presentation: .named))
+        if let resetLabel = provider.resetLabel {
+            if let burn = provider.burnRateProjection {
+                return "\(resetLabel) · \(burn)"
+            }
+            return resetLabel
+        }
+        guard let resetsAt = provider.resetsAt else {
+            if let burn = provider.burnRateProjection {
+                return burn
+            }
+            return "Conecte para ver a renovação"
+        }
+        if resetsAt <= .now {
+            if let burn = provider.burnRateProjection {
+                return "renovação pendente · \(burn)"
+            }
+            return "renovação pendente"
+        }
+        let rel = "volta a 100% " + resetsAt.formatted(.relative(presentation: .named))
+        if let burn = provider.burnRateProjection {
+            return "\(rel) · \(burn)"
+        }
+        return rel
     }
 
     private var compactValueText: String {

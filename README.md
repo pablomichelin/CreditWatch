@@ -5,7 +5,7 @@
 ### Monitor de Créditos e Limites de Ferramentas de IA para macOS
 
 [![macOS](https://img.shields.io/badge/macOS-Sonoma%2014%2B%20%7C%20Sequoia-black?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/pablomichelin/CreditWatch/releases/latest)
-[![Release](https://img.shields.io/badge/Vers%C3%A3o-v0.14.0-2ea44f?style=for-the-badge&logo=github)](https://github.com/pablomichelin/CreditWatch/releases/latest)
+[![Release](https://img.shields.io/badge/Vers%C3%A3o-v0.15.0-2ea44f?style=for-the-badge&logo=github)](https://github.com/pablomichelin/CreditWatch/releases/latest)
 [![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-Apoiar-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/pablomichelin)
 [![Privacidade](https://img.shields.io/badge/Privacidade-100%25%20Local-blue?style=for-the-badge&logo=lock)](https://github.com/pablomichelin/CreditWatch)
 
@@ -34,6 +34,7 @@
 ## 🌟 O que o CreditWatch faz por você?
 
 - ⏱️ **Atualização em Tempo Real:** Consulta e atualiza automaticamente o consumo e saldo das suas IAs a cada 60 segundos e ao abrir o menu.
+- 📈 **Estimativa de Ritmo (Burn Rate):** Algoritmo inteligente que projeta o tempo restante da sua cota e alerta se ela vai esgotar antes do reset.
 - 🎯 **Visão Clara e Consolidada:** Acompanhe seus limites semanais, saldo em dólares (On-Demand) e horários exatos de reset em um painel elegante.
 - 🛡️ **Totalmente Seguro e Privado:** Não coleta dados pessoais, não usa servidores intermediários e funciona 100% no seu computador.
 - 🎨 **Feito para o Mac:** Visual minimalista e integrado perfeitamente ao tema claro/escuro do macOS.

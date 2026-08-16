@@ -57,6 +57,11 @@ enum ProviderKind: String, CaseIterable, Codable, Identifiable {
     }
 }
 
+struct UsageSample: Codable, Equatable {
+    var date: Date
+    var remaining: Int
+}
+
 struct ProviderUsage: Identifiable, Codable, Equatable {
     var id = UUID()
     var name: String
@@ -69,6 +74,110 @@ struct ProviderUsage: Identifiable, Codable, Equatable {
     var resetLabel: String? = nil
     var lastUpdatedAt: Date? = nil
     var enabled = true
+    var history: [UsageSample] = []
+
+    enum CodingKeys: String, CodingKey {
+        case id, name, kind, remaining, unit, resetsAt, detail, resetLabel, lastUpdatedAt, enabled, history
+    }
+
+    init(id: UUID = UUID(), name: String, kind: ProviderKind, remaining: Int, unit: String,
+         resetsAt: Date?, detail: String? = nil, resetLabel: String? = nil,
+         lastUpdatedAt: Date? = nil, enabled: Bool = true, history: [UsageSample] = []) {
+        self.id = id
+        self.name = name
+        self.kind = kind
+        self.remaining = remaining
+        self.unit = unit
+        self.resetsAt = resetsAt
+        self.detail = detail
+        self.resetLabel = resetLabel
+        self.lastUpdatedAt = lastUpdatedAt
+        self.enabled = enabled
+        self.history = history
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = try container.decodeIfPresent(UUID.self, forKey: .id) ?? UUID()
+        self.name = try container.decode(String.self, forKey: .name)
+        self.kind = try container.decode(ProviderKind.self, forKey: .kind)
+        self.remaining = try container.decode(Int.self, forKey: .remaining)
+        self.unit = try container.decode(String.self, forKey: .unit)
+        self.resetsAt = try container.decodeIfPresent(Date.self, forKey: .resetsAt)
+        self.detail = try container.decodeIfPresent(String.self, forKey: .detail)
+        self.resetLabel = try container.decodeIfPresent(String.self, forKey: .resetLabel)
+        self.lastUpdatedAt = try container.decodeIfPresent(Date.self, forKey: .lastUpdatedAt)
+        self.enabled = try container.decodeIfPresent(Bool.self, forKey: .enabled) ?? true
+        self.history = try container.decodeIfPresent([UsageSample].self, forKey: .history) ?? []
+    }
+
+    mutating func recordSample(remaining: Int, date: Date = .now) {
+        guard remaining >= 0 else { return }
+        if let last = history.last {
+            if last.remaining == remaining && date.timeIntervalSince(last.date) < 1800 {
+                return
+            }
+        }
+        history.append(UsageSample(date: date, remaining: remaining))
+        if history.count > 30 {
+            history.removeFirst(history.count - 30)
+        }
+    }
+
+    /// Projeção inteligente de Burn Rate baseada no histórico recente de amostras
+    var burnRateProjection: String? {
+        guard remaining >= 0, history.count >= 2 else { return nil }
+        let isUsage = unit.contains("usado")
+        let sorted = history.sorted(by: { $0.date < $1.date })
+        guard let latest = sorted.last else { return nil }
+
+        // Localiza início do ciclo atual (após o último reset/recarga detectado)
+        var startSample = sorted.first!
+        for i in 1..<sorted.count {
+            let prevAvailable = isUsage ? max(0, 100 - sorted[i - 1].remaining) : sorted[i - 1].remaining
+            let currAvailable = isUsage ? max(0, 100 - sorted[i].remaining) : sorted[i].remaining
+            if currAvailable - prevAvailable >= 15 {
+                startSample = sorted[i]
+            }
+        }
+
+        let startAvailable = Double(isUsage ? max(0, 100 - startSample.remaining) : startSample.remaining)
+        let currentAvailable = Double(isUsage ? max(0, 100 - latest.remaining) : latest.remaining)
+        let timeDiff = latest.date.timeIntervalSince(startSample.date)
+
+        guard timeDiff >= 120 else { return nil }
+
+        let consumed = startAvailable - currentAvailable
+        guard consumed > 0 else { return nil }
+
+        let ratePerHour = consumed / (timeDiff / 3600.0)
+        guard ratePerHour > 0.0001 else { return nil }
+
+        let hoursRemaining = currentAvailable / ratePerHour
+        let daysRemaining = hoursRemaining / 24.0
+
+        func formatDuration(_ days: Double) -> String {
+            if days < 1.0 {
+                let h = max(1, Int((days * 24).rounded()))
+                return "\(h)h"
+            } else if days < 10.0 {
+                return String(format: "%.1fd", days)
+            } else {
+                return "\(Int(days.rounded()))d"
+            }
+        }
+
+        if let resetsAt, resetsAt > .now {
+            let daysToReset = resetsAt.timeIntervalSinceNow / 86400.0
+            if daysRemaining < daysToReset {
+                return "⚡ esgota em ~\(formatDuration(daysRemaining))"
+            } else {
+                return "ritmo estável (~\(formatDuration(daysRemaining)))"
+            }
+        } else {
+            return "~\(formatDuration(daysRemaining)) no ritmo atual"
+        }
+    }
 
     static let defaults: [ProviderUsage] = [
         .init(name: "Codex · limite semanal", kind: .codex, remaining: -1, unit: "% restante", resetsAt: nil),
@@ -364,6 +473,7 @@ final class UsageStore: ObservableObject {
         providers[index].detail = detail
         providers[index].resetLabel = resetLabel
         providers[index].lastUpdatedAt = .now
+        providers[index].recordSample(remaining: remaining)
     }
 
     func importAntigravityUsage(_ data: Data) -> Bool {
