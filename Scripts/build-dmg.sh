@@ -9,7 +9,7 @@ bash "$project_dir/Scripts/build-app.sh"
 
 dmg_staging="$project_dir/dist/dmg_staging"
 dmg_out="$project_dir/dist/CreditWatch-v${version}.dmg"
-zip_out="$project_dir/CreditWatch-v${version}-macOS.zip"
+zip_out="$project_dir/dist/CreditWatch-v${version}-macOS.zip"
 
 echo "Preparando estrutura do DMG com atalho para /Applications..."
 rm -rf "$dmg_staging" "$dmg_out"

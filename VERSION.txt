@@ -1,4 +1,0 @@
-CreditWatch
-Versao: 0.15.3 (Build 37)
-Projeto: https://github.com/pablomichelin/CreditWatch
-Apoio: https://buymeacoffee.com/pablomichelin
