@@ -1,4 +1,4 @@
 CreditWatch
-Versao: 0.15.1 (Build 35)
+Versao: 0.15.2 (Build 36)
 Projeto: https://github.com/pablomichelin/CreditWatch
 Apoio: https://buymeacoffee.com/pablomichelin
