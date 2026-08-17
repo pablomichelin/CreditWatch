@@ -138,7 +138,7 @@ struct UsageMenu: View {
             .foregroundStyle(.secondary)
             Link(destination: AppInfo.projectURL) {
                 HStack(spacing: 4) {
-                    Text("CreditWatch v\(AppInfo.version)")
+                    Text("CreditWatch v\(AppInfo.version) · Pablo Michelin")
                     Image(systemName: "arrow.up.right")
                         .font(.system(size: 8))
                 }
@@ -205,7 +205,7 @@ struct DashboardView: View {
             }
             Link(destination: AppInfo.projectURL) {
                 HStack(spacing: 4) {
-                    Text("CreditWatch v\(AppInfo.version) · Ver no GitHub")
+                    Text("CreditWatch v\(AppInfo.version) · Pablo Michelin · Ver no GitHub")
                     Image(systemName: "arrow.up.right")
                         .font(.caption2)
                 }
@@ -427,7 +427,7 @@ struct SettingsView: View {
                 if let launchError { Text(launchError).font(.caption).foregroundStyle(.red) }
                 Link(destination: AppInfo.projectURL) {
                     HStack(spacing: 4) {
-                        Text("CreditWatch v\(AppInfo.version) · Projeto no GitHub")
+                        Text("CreditWatch v\(AppInfo.version) · Pablo Michelin · Projeto no GitHub")
                         Image(systemName: "arrow.up.right")
                             .font(.system(size: 8))
                     }
