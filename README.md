@@ -4,22 +4,16 @@
 
 ### Monitor de Créditos e Limites de Ferramentas de IA para macOS
 
-[![macOS](https://img.shields.io/badge/macOS-Sonoma%2014%2B%20%7C%20Sequoia-black?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/pablomichelin/CreditWatch/releases/latest)
-[![Release](https://img.shields.io/badge/Vers%C3%A3o-v0.15.3-2ea44f?style=for-the-badge&logo=github)](https://github.com/pablomichelin/CreditWatch/releases/latest)
+[![macOS](https://img.shields.io/badge/macOS-Sonoma%2014%2B%20%7C%20Sequoia-black?style=for-the-badge&logo=apple&logoColor=white)](#)
+[![Release](https://img.shields.io/badge/Vers%C3%A3o-v0.21.27-2ea44f?style=for-the-badge&logo=github)](https://github.com/pablomichelin/CreditWatch/releases/latest)
 [![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-Apoiar-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/pablomichelin)
-[![Privacidade](https://img.shields.io/badge/Privacidade-100%25%20Local-blue?style=for-the-badge&logo=lock)](https://github.com/pablomichelin/CreditWatch)
+[![Privacidade](https://img.shields.io/badge/Privacidade-100%25%20Local-blue?style=for-the-badge&logo=lock)](#)
 
-<br/>
+**Acompanhe limites, créditos, saldos e resets das suas ferramentas de IA em um único app nativo para macOS.**
 
-**Acompanhe o saldo, porcentagens restantes e datas de renovação das suas ferramentas de IA em um só lugar, diretamente da barra de menus do Mac.**
+> **Distribuição pública atual:** este repositório funciona como vitrine oficial e histórico de versões do CreditWatch. Binários públicos para download estão temporariamente indisponíveis enquanto a distribuição assinada/notarizada via Apple Developer não está habilitada.
 
-<br/>
-
-[📥 **Baixar Aplicativo para macOS (.dmg)**](https://github.com/pablomichelin/CreditWatch/releases/latest) • [Como Usar](#-como-instalar-e-usar) • [Serviços Suportados](#-ferramentas-de-ia-suportadas) • [Apoiar](#-apoie-o-projeto)
-
-<br/>
-
-### 📱 Interface do Aplicativo
+### 📱 Interface
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/pablomichelin/CreditWatch/main/assets/menubar-preview.jpg" alt="Menu Bar do CreditWatch" width="48%" />
@@ -31,66 +25,60 @@
 
 ---
 
-## 🌟 O que o CreditWatch faz por você?
+## 🌟 O que o CreditWatch faz
 
-- ⏱️ **Atualização em Tempo Real:** Consulta e atualiza automaticamente o consumo e saldo das suas IAs a cada 60 segundos e ao abrir o menu.
-- 📈 **Estimativa de Ritmo (Burn Rate):** Algoritmo inteligente que projeta o tempo restante da sua cota e alerta se ela vai esgotar antes do reset.
-- 🎯 **Visão Clara e Consolidada:** Acompanhe seus limites semanais, saldo em dólares (On-Demand) e horários exatos de reset em um painel elegante.
-- 🛡️ **Totalmente Seguro e Privado:** Não coleta dados pessoais, não usa servidores intermediários e funciona 100% no seu computador.
-- 🎨 **Feito para o Mac:** Visual minimalista e integrado perfeitamente ao tema claro/escuro do macOS.
+- **Visão consolidada:** reúne em um único lugar limites, créditos, saldos e horários de renovação das IAs conectadas.
+- **Atualização automática:** acompanha as fontes conectadas e permite atualização manual imediata.
+- **Burn Rate e capacidade:** usa histórico local para estimar ritmo de consumo e risco de esgotamento quando há dados suficientes.
+- **Alertas nativos:** avisa sobre cotas percentuais baixas, esgotamento e renovação sem confundir créditos, moedas ou horas com porcentagem.
+- **Privacidade local:** não usa backend intermediário e não lê cookies de outros navegadores.
+- **macOS nativo:** Swift, SwiftUI, AppKit e WebKit.
 
 ---
 
-## 🤖 Ferramentas de IA Suportadas
+## 🤖 Ferramentas acompanhadas
 
-| Ferramenta | Informações Acompanhadas |
+| Ferramenta | Informações acompanhadas |
 | :--- | :--- |
-| **Cursor** | Cotas de modelos (%), uso sob demanda em US$ e data de renovação |
-| **OpenAI Codex** | Limite semanal restante, saldo de créditos pré-pagos e horário de redefinição |
-| **ChatGPT** | Identificação do plano ativo (Plus, Pro, Free) e status |
-| **Claude** | Plano da conta (Pro, Max, Free) e disponibilidade de cotas |
-| **Google AI Studio** | Medidores de requisições por minuto (RPM), tokens por minuto (TPM) e requisições por dia (RPD) |
-| **Antigravity** | Limites semanais e de 5 horas do Gemini e Claude/GPT |
-| **Grok** | Limites semanais compartilhados dos planos SuperGrok |
-| **Perplexity Pro** | Consultas diárias Pro restantes e identificação de plano |
-| **DeepSeek** | Saldo de créditos e consumo de recarga em USD da API |
-| **OpenRouter** | Saldo pré-pago de tokens em USD e créditos de API |
-| **v0.dev** | Saldo de créditos de geração de UI e prototipagem frontend |
-| **Midjourney** | Horas rápidas (Fast Hours) restantes e saldo de conta |
+| **Cursor** | uso incluído ou pools First-party / Third-party quando expostos; On-Demand monetário explícito |
+| **OpenAI Codex** | limite semanal quando explicitamente exposto e saldo de créditos |
+| **ChatGPT** | identificação/status do plano e sessão, sem inventar percentual único de uso |
+| **Claude** | sessão de 5 horas e limites semanais disponíveis em Usage |
+| **Google AI Studio** | RPM, TPM e RPD realmente expostos pelo projeto/modelo |
+| **Antigravity** | quotas locais via RPC, incluindo janelas semanais e de 5 horas disponíveis |
+| **Grok** | pool semanal pago e Extra Usage Credits quando expostos |
+| **Perplexity** | créditos do Computer por bucket ou saldo total explícito |
+| **DeepSeek** | saldo preservando a moeda real, USD ou CNY |
+| **OpenRouter** | créditos adquiridos, uso total e saldo disponível |
+| **v0** | créditos restantes e limite quando expostos |
+| **Midjourney** | Fast Time mensal e horas extras separadas quando expostas |
 
 ---
 
-## 🚀 Como Instalar e Usar
+## 📦 Versões
 
-1. Baixe o instalador oficial em [**Releases Oficiais**](https://github.com/pablomichelin/CreditWatch/releases/latest) (`CreditWatch-v0.15.3.dmg`);
-2. Abra o arquivo `.dmg` com dois cliques;
-3. Arraste o ícone do **CreditWatch** para a sua pasta **Aplicativos**;
-4. Abra o aplicativo na barra de menus, clique em **Configurar** e conecte as IAs que você utiliza.
+As mudanças públicas são registradas em **GitHub Releases**. Somente versões validadas entram no histórico público como releases oficiais do projeto.
 
----
-
-## 🔒 Privacidade e Segurança
-
-- **100% Local:** O CreditWatch não possui servidores externos e não envia nenhuma informação para terceiros.
-- **Sessões Protegidas:** As conexões com os painéis utilizam o armazenamento seguro oficial do macOS.
-- **Transparência:** Todos os dados de leitura são salvos exclusivamente no seu próprio computador.
+Enquanto os binários assinados/notarizados não estiverem disponíveis, as releases funcionam como **histórico oficial de versão e changelog público**, sem instalador para download.
 
 ---
 
-## ☕ Apoie o Projeto
+## 🔒 Privacidade e segurança
 
-Se o **CreditWatch** é útil para o seu dia a dia e te ajuda a economizar tempo acompanhando seus limites de IA, considere apoiar o desenvolvimento contínuo:
+- dados de uso e histórico ficam no Mac;
+- sessões web usam o WebKit controlado pelo próprio app;
+- sem backend intermediário do CreditWatch;
+- sem persistência de senhas ou tokens efêmeros pelo app.
 
-<p align="left">
-  <a href="https://buymeacoffee.com/pablomichelin" target="_blank">
-    <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="50" />
-  </a>
-</p>
+---
+
+## ☕ Apoie o projeto
+
+Se o CreditWatch é útil no seu dia a dia, você pode apoiar o desenvolvimento em [Buy Me a Coffee](https://buymeacoffee.com/pablomichelin).
 
 ---
 
 ## 👤 Autor
 
 Desenvolvido por **Pablo Michelin**.  
-Página Oficial: [github.com/pablomichelin/CreditWatch](https://github.com/pablomichelin/CreditWatch)  
 Suporte: [pablo@systemup.inf.br](mailto:pablo@systemup.inf.br)

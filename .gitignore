@@ -1,23 +1,21 @@
-# macOS & Compilação
 .DS_Store
 .build/
 dist/
 *.zip
 *.dmg
+*.sha256
 *.swp
 *~
-
-# Código-fonte e Estrutura de Desenvolvimento (Closed Source)
 Sources/
+Tests/
 Package.swift
 Package.resolved
 Scripts/
 Resources/
+Distribution/
 BrowserExtension/
 BrowserExtension-Firefox/
 BrowserExtension-Safari/
-
-# Documentação Interna de Engenharia e Governança Local
 docs/
 VERSION.md
 EXTENSOES.md
