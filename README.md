@@ -5,13 +5,13 @@
 ### Monitor de Créditos e Limites de Ferramentas de IA para macOS
 
 [![macOS](https://img.shields.io/badge/macOS-Sonoma%2014%2B%20%7C%20Sequoia-black?style=for-the-badge&logo=apple&logoColor=white)](#)
-[![Release](https://img.shields.io/badge/Vers%C3%A3o-v0.21.27-2ea44f?style=for-the-badge&logo=github)](https://github.com/pablomichelin/CreditWatch/releases/latest)
+[![Release](https://img.shields.io/badge/Vers%C3%A3o-v0.21.40-2ea44f?style=for-the-badge&logo=github)](https://github.com/pablomichelin/CreditWatch/releases/latest)
 [![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-Apoiar-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/pablomichelin)
 [![Privacidade](https://img.shields.io/badge/Privacidade-100%25%20Local-blue?style=for-the-badge&logo=lock)](#)
 
 **Acompanhe limites, créditos, saldos e resets das suas ferramentas de IA em um único app nativo para macOS.**
 
-> **Distribuição pública atual:** este repositório funciona como vitrine oficial e histórico de versões do CreditWatch. Binários públicos para download estão temporariamente indisponíveis enquanto a distribuição assinada/notarizada via Apple Developer não está habilitada.
+> **Distribuição pública:** cada nova versão do app é publicada em [GitHub Releases](https://github.com/pablomichelin/CreditWatch/releases/latest) com ZIP ad-hoc para download. macOS pode pedir confirmação na primeira abertura (assinatura local, não notarizada). Quando a distribuição assinada/notarizada estiver habilitada, as releases incluirão DMG/ZIP oficiais.
 
 ### 📱 Interface
 
@@ -57,9 +57,9 @@
 
 ## 📦 Versões
 
-As mudanças públicas são registradas em **GitHub Releases**. Somente versões validadas entram no histórico público como releases oficiais do projeto.
+As mudanças públicas são registradas em **GitHub Releases**. Cada bump de versão do app gera release pública com ZIP ad-hoc para download.
 
-Enquanto os binários assinados/notarizados não estiverem disponíveis, as releases funcionam como **histórico oficial de versão e changelog público**, sem instalador para download.
+Enquanto a notarização Apple Developer não estiver habilitada, o ZIP é assinado ad-hoc localmente. macOS pode solicitar abertura manual na primeira execução.
 
 ---
 
