@@ -5,7 +5,7 @@
 ### Monitor de Créditos e Limites de Ferramentas de IA para macOS
 
 [![macOS](https://img.shields.io/badge/macOS-Sonoma%2014%2B%20%7C%20Sequoia-black?style=for-the-badge&logo=apple&logoColor=white)](#)
-[![Release](https://img.shields.io/badge/Vers%C3%A3o-v0.21.82-2ea44f?style=for-the-badge&logo=github)](https://github.com/pablomichelin/CreditWatch/releases/latest)
+[![Release](https://img.shields.io/badge/Vers%C3%A3o-v0.21.84-2ea44f?style=for-the-badge&logo=github)](https://github.com/pablomichelin/CreditWatch/releases/latest)
 [![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-Apoiar-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/pablomichelin)
 [![Privacidade](https://img.shields.io/badge/Privacidade-100%25%20Local-blue?style=for-the-badge&logo=lock)](#)
 
@@ -42,7 +42,7 @@
 | :--- | :--- |
 | **Cursor** | uso incluído ou pools First-party / Third-party quando expostos; On-Demand monetário explícito |
 | **OpenAI Codex** | limite semanal quando explicitamente exposto e saldo de créditos |
-| **ChatGPT** | identificação/status do plano e sessão, sem inventar percentual único de uso |
+| **ChatGPT** | cota semanal compartilhada quando publicada, além do status do plano e da sessão |
 | **Claude** | sessão de 5 horas e limites semanais disponíveis em Usage |
 | **Google AI Studio** | RPM, TPM e RPD realmente expostos pelo projeto/modelo |
 | **Antigravity** | quotas locais via RPC, incluindo janelas semanais e de 5 horas disponíveis |
